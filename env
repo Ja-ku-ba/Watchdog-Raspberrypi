@@ -1,0 +1,32 @@
+REMOTE_SERVER_URL = "server_url"
+DEVICE_UID = "some_uid"
+INTERFACE = "wlan0"
+AP_PASSWORD = "w4tchd0g$"
+AP_CONNECTION_NAME = "WatchDog"
+WAIT_TIME = 5
+MAX_RETRIES = 12
+POSTMAN_SCRIPT = "/home/jakub/Desktop/workers/postman.py"
+
+CHECK_INTERVAL = 10
+LOG_FILE = "/home/jakub/Desktop/workers/watchdog_father.log"
+
+GATE_WATCHER_SCRIPT = "/home/jakub/Desktop/workers/gate_watcher.py"
+WORKER_SCRIPT = "/home/jakub/Desktop/workers/worker.py"
+WORKER_SCRIPT_VENV = "/home/jakub/Desktop/workers/.venv/bin/python3"
+WORKER_ENV_PATH = "/home/jakub/Desktop/workers/.venv_camera/bin/python3"
+STREAM_URL = "rtsp://localhost:8554/camera?tcp"
+OUTPUT_DIR = "/home/jakub/Desktop/camera/recordings"
+PID_FILE = "/tmp/record_ffmpeg.pid"
+MOTION_LOG_FILE = "/tmp/motion_detection.log"
+
+# --- parametry ---
+MOTION_RATIO_THRESHOLD = 0.01
+MOTION_SENSITIVITY = 25
+RECORDING_AFTER_MOTION = 15
+MOTION_CHECK_INTERVAL = 1
+FACE_SCAN_TIME = 15
+FRAME_WIDTH = 1920
+FRAME_HEIGHT = 1080
+MOTION_WIDTH = 320
+MOTION_HEIGHT = 240
+MEDIAMTX_DIR = "/home/jakub/Desktop/mediamtx"

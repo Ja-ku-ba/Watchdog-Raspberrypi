@@ -1,0 +1,19 @@
+[Unit]
+Description=Watchdog WiFi system
+After=network.target
+
+[Service]
+Type=simple
+User=jakub
+Group=jakub
+WorkingDirectory=/home/jakub/Desktop/workers
+
+ExecStart=/home/jakub/Desktop/workers/.venv/bin/python /home/jakub/Desktop/workers/father.py
+
+# LOGI
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
