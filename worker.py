@@ -31,6 +31,7 @@ FRAME_HEIGHT = int(os.getenv("FRAME_HEIGHT"))
 MOTION_WIDTH = int(os.getenv("MOTION_WIDTH"))
 MOTION_HEIGHT = int(os.getenv("MOTION_HEIGHT"))
 MEDIAMTX_DIR = os.getenv("MEDIAMTX_DIR")
+MAX_DETECTIONS = os.getenv("MAX_DETECTIONS")
 
 FACE_OUTPUT_DIR = os.path.join(OUTPUT_DIR, "faces")
 os.makedirs(FACE_OUTPUT_DIR, exist_ok=True)
@@ -65,6 +66,7 @@ class MotionRecorder:
         self.ensure_mediapipe_running()
 
         self.last_face_save = datetime.min
+        self.curent_detected_faces = 0
 
     def ensure_mediapipe_running(self):
         try:
@@ -190,6 +192,8 @@ class MotionRecorder:
             logger.error(f"B³¹d startu nagrywania, w lini: {sys.exc_info()[2].tb_lineno}, komunikat b³êdu: {str(e)}")
 
     def stop_ffmpeg_recording(self):
+        self.curent_detected_faces = 0
+
         if not self.recording or not self.ffmpeg_proc:
             return
         try:
@@ -213,6 +217,8 @@ class MotionRecorder:
     def save_face(self, face_img):
         if face_img is None or face_img.size == 0:
             return
+        
+        self.curent_detected_faces += 1
 
         try:
             success, encoded_image = cv2.imencode(".jpg", face_img, [cv2.IMWRITE_JPEG_QUALITY, 85])
@@ -311,7 +317,8 @@ class MotionRecorder:
                     last_face_check = current_time
                     
                     if self.motion_detected_recently and self.face_detection is not None:
-                        self.detect_faces_mediapipe(full_frame)
+                        if self.curent_detected_faces <= MAX_DETECTIONS:
+                            self.detect_faces_mediapipe(full_frame)
                 
                 motion_frame = cv2.resize(frame, (MOTION_WIDTH, MOTION_HEIGHT))
                 motion_gray = cv2.cvtColor(motion_frame, cv2.COLOR_BGR2GRAY)
@@ -355,7 +362,6 @@ class MotionRecorder:
         logger.info("Detekcja ruchu zatrzymana")
 
     def detect_faces_mediapipe(self, frame):
-        """Detekcja twarzy z MediaPipe - szybsza i dok³adniejsza ni¿ Haar"""
         if self.face_detection is None:
             return
         
